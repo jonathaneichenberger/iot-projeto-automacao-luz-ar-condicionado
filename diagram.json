@@ -70,10 +70,10 @@
     [ "lcd1:RW", "esp:GND.3", "black", [ "h-0.1", "v19.2", "h-9.6" ] ],
     [ "lcd1:VSS", "esp:GND.3", "black", [ "v19.2", "h28.8" ] ],
     [ "lcd1:VDD", "esp:5V", "red", [ "v38.4", "h153.7", "v124.95" ] ],
-    [ "ring1:VCC", "esp:5V", "red", [ "h-28.8", "v-28.8", "h-163.2" ] ],
-    [ "ring1:DIN", "esp:CLK", "blue", [ "h-144", "v-153.6" ] ],
+    [ "ring1:VCC", "esp:5V", "red", [ "h-115.2", "v0", "h-76.8" ] ],
+    [ "ring1:DIN", "esp:CLK", "blue", [ "h-153.6", "v-134.4" ] ],
     [ "ring1:GND", "esp:GND.1", "black", [ "h-240", "v-19.05" ] ],
-    [ "ring2:GND", "esp:GND.1", "black", [ "h28.8", "v-57.6", "h220.8" ] ],
+    [ "ring2:GND", "esp:GND.1", "black", [ "h249.6", "v-38.25" ] ],
     [ "ring2:VCC", "esp:5V", "red", [ "h153.6", "v0", "h144" ] ],
     [ "ring2:DIN", "esp:32", "blue", [ "h105.6", "v0", "h76.8" ] ]
   ],
