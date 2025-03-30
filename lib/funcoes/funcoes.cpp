@@ -99,6 +99,7 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Umidade: "); Serial.print(umidade); Serial.println(" %");
   Serial.print("Luminosidade: "); Serial.print(luminosidade); Serial.println(" lux");
   Serial.println("------------------------");
+  
 }
 
 void exibirDadosNoLCD() {
@@ -139,3 +140,29 @@ void controleArCondicionado(){
   stripAir.show();
 }
 
+void controleLampadas() {
+  int brilho;
+
+  if (movimento) {
+    if (luminosidade <= 400) {  
+      brilho = map(luminosidade, 0, 400, 255, 150);
+      uint32_t corBranca = strip.ColorHSV(0, 0, brilho);
+      for (int i = 0; i < PIXEL_COUNT; i++) {
+        strip.setPixelColor(i, corBranca);
+      }
+    } else if (luminosidade > 400 && luminosidade <= 3000) {
+      brilho = map(luminosidade, 400, 3000, 150, 0);
+      uint32_t corAmarela = strip.ColorHSV(40 * 65536 / 360, 255, brilho);
+      for (int i = 0; i < PIXEL_COUNT; i++) {
+        strip.setPixelColor(i, corAmarela);
+      }
+    } else {
+      strip.clear();
+    }
+  
+    strip.show();
+  } else {
+    strip.clear();
+    strip.show();
+  }
+}

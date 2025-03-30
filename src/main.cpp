@@ -24,5 +24,15 @@ void loop() {
     ultimoMovimento = movimento;        // Atualiza o último movimento lido
   }
 
+  if (movimento) {
+    controleLampadas();                // Controla as lâmpadas com base no movimento
+    controleArCondicionado();           // Controla o ar-condicionado com base na temperatura e movimento
+  } else {
+    strip.clear();                     // Desliga as lâmpadas se não houver movimento
+    strip.show();                      // Atualiza o NeoPixel das lâmpadas
+    stripAir.clear();                     // Desliga o Ar-condicionado se não houver movimento
+    stripAir.show();                      // Atualiza o NeoPixel do Ar-condicionado
+  }
+
   client.loop();
 }
