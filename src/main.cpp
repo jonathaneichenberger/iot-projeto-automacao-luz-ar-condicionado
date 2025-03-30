@@ -1,12 +1,28 @@
 #include "funcoes.h"
 
+// Inicializa as variáveis de últimos dados lidos
+float ultimaTemperatura = 0.0; // Variável para armazenar a última temperatura lida
+float ultimaUmidade = 0.0;     // Variável para armazenar a última umidade lida
+float ultimaLuminosidade = 0.0; // Variável para armazenar a última luminosidade lida
+bool ultimoMovimento = false; // Variável para armazenar o último movimento lido
+
 void setup() {
-  inicializarSistema(); // Inicializa o sistema, incluindo Wi-Fi, MQTT e LCD
+  inicializarSistema();                 // Inicializa o sistema, incluindo Wi-Fi, MQTT e LCD
+  exibirDadosNoLCD();                   // Exibe os dados iniciais no LCD
 }
 
 void loop() {
   if (!client.connected()) {
     conectarBrokerMQTT();
   }
+  
+  if (temperatura != ultimaTemperatura || umidade != ultimaUmidade || luminosidade != ultimaLuminosidade || movimento != ultimoMovimento) {
+    exibirDadosNoLCD();                 // Atualiza o LCD com os dados recebidos
+    ultimaTemperatura = temperatura;    // Atualiza a última temperatura lida
+    ultimaUmidade = umidade;            // Atualiza a última umidade lida
+    ultimaLuminosidade = luminosidade;  // Atualiza a última luminosidade lida
+    ultimoMovimento = movimento;        // Atualiza o último movimento lido
+  }
+
   client.loop();
 }

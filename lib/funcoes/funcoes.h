@@ -25,8 +25,8 @@ void inicializarSistema();
 void conectarWiFi();
 void conectarBrokerMQTT();
 void callback(char* topic, byte* payload, unsigned int length);
+void exibirDadosNoLCD();
  
-
 // Constantes para conexão com a internet
 constexpr const char* rede = "Wokwi-GUEST";            // Nome da rede Wi-Fi
 constexpr const char* senha = "";                      // Senha da rede Wi-Fi
@@ -36,7 +36,6 @@ constexpr const int canalWiFi = 6;                     // Canal Wi-Fi
 constexpr const char* servidorMQTT = "broker.emqx.io"; // Endereço do servidor MQTT
 constexpr const int portaMQTT = 1883;                  // Porta do servidor MQTT
 constexpr const char* topico = "senai/dataJson";       // Tópico MQTT para publicação/assinatura
-
 
 // Variaveis globais para receber dados do Broker MQTT
 extern bool movimento;        // Variável para armazenar o valor de movimento

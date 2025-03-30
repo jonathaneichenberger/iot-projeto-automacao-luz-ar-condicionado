@@ -100,3 +100,22 @@ void callback(char* topic, byte* payload, unsigned int length) {
   Serial.print("Luminosidade: "); Serial.print(luminosidade); Serial.println(" lux");
   Serial.println("------------------------");
 }
+
+void exibirDadosNoLCD() {
+  lcd.setCursor(0, 0);
+  lcd.print("Temp: ");
+  lcd.print(temperatura);
+  lcd.print(" C    ");  
+
+  lcd.setCursor(0, 1);
+  lcd.print("Mov: ");
+  lcd.print(movimento ? "DETECTADO" : "NENHUM    ");
+
+  lcd.setCursor(0, 2);
+  lcd.print("Lampadas: ");
+  lcd.print(movimento && luminosidade < 3000 ? "LIGADAS   " : "DESLIGADAS");
+  
+  lcd.setCursor(0, 3);
+  lcd.print("Ar Cond: ");
+  lcd.print((temperatura < 20 || temperatura > 25) && movimento ? "LIGADO   " : "DESLIGADO");
+}
