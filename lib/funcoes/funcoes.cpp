@@ -45,7 +45,8 @@ void callback(char* topic, byte* payload, unsigned int length) {
   char mensagem[length + 1];                                   // Cria um buffer para armazenar a mensagem recebida
   memcpy(mensagem, payload, length);                           // Copia os dados da mensagem para o buffer
   mensagem[length] = '\0';                                     // Adiciona o caractere nulo ao final para formar uma string válida
-  StaticJsonDocument<200> doc;                                 // Cria um documento JSON com capacidade de 200 bytes
+  JsonDocument doc;                                            // Cria um objeto JSON para armazenar os dados recebidos vazio (tipo dinâmico)                   
+  //doc["answer"] = 80;                                          // Adiciona um par chave-valor ao JSON, onde "answer" tem o valor 80
   DeserializationError error = deserializeJson(doc, mensagem); // Converte a string JSON recebida para um objeto JSON
   if (error) {                                                 // Verifica se houve erro na conversão do JSON
     Serial.print("Erro ao analisar JSON: ");                   // Mensagem de erro se a conversão falhar                
