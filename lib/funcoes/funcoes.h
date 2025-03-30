@@ -31,11 +31,19 @@ void callback(char* topic, byte* payload, unsigned int length);
 constexpr const char* rede = "Wokwi-GUEST";            // Nome da rede Wi-Fi
 constexpr const char* senha = "";                      // Senha da rede Wi-Fi
 constexpr const int canalWiFi = 6;                     // Canal Wi-Fi
+
 // Constantes para conexão do Broker com protocolo MQTT
 constexpr const char* servidorMQTT = "broker.emqx.io"; // Endereço do servidor MQTT
 constexpr const int portaMQTT = 1883;                  // Porta do servidor MQTT
 constexpr const char* topico = "senai/dataJson";       // Tópico MQTT para publicação/assinatura
 extern WiFiClient espClient;                           // Cliente Wi-Fi para comunicação
 extern PubSubClient client;                            // Cliente MQTT para comunicação
+
+// Definição do LCD (RS, E, D4, D5, D6 e D7)
+extern LiquidCrystal lcd(LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7); 
+
+// Configuração dos NeoPixels
+extern Adafruit_NeoPixel strip(PIXEL_COUNT, LAMP_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
+extern Adafruit_NeoPixel stripAir(PIXEL_COUNT, AIR_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 #endif

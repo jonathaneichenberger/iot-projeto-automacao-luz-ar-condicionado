@@ -1,13 +1,19 @@
 #include "funcoes.h"
 
-WiFiClient espClient;
-PubSubClient client(espClient);
+
 
 void inicializarSistema(){
-  Serial.begin(115200);         // Inicializa a comunicação serial a 115200 bps
-  conectarWiFi();               // Conecta ao Wi-Fi
-  client.setCallback(callback); // Define a função de callback para mensagens recebidas
-  conectarBrokerMQTT();         // Conecta ao broker MQTT
+  Serial.begin(115200);            // Inicializa a comunicação serial a 115200 bps
+
+  // Definição dos pinos do LCD
+  pinMode(LAMP_PIXEL_PIN, OUTPUT); // Inicializa o pino do NeoPixel das lâmpadas como saída
+  pinMode(AIR_PIXEL_PIN, OUTPUT);  // Inicializa o pino do NeoPixel do ar-condicionado como saída              
+  
+  lcd.begin(20, 4);                // Inicializa o LCD com 20 colunas e 4 linhas
+
+  conectarWiFi();                  // Conecta ao Wi-Fi
+  client.setCallback(callback);    // Define a função de callback para mensagens recebidas
+  conectarBrokerMQTT();            // Conecta ao broker MQTT
 }
 
 void conectarWiFi() {
