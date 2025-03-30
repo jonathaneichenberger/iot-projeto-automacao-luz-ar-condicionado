@@ -22,6 +22,19 @@
 
 // Protótipos das funções
 void inicializarSistema();
-void conectarWiFi(const char* rede, const char* senha, const int canalWiFi);
+void conectarWiFi();
+void conectarMQTT();
+ 
+
+// Constantes para conexão com a internet
+constexpr const char* rede = "Wokwi-GUEST";            // Nome da rede Wi-Fi
+constexpr const char* senha = "";                      // Senha da rede Wi-Fi
+constexpr const int canalWiFi = 6;                     // Canal Wi-Fi
+// Constantes para conexão do Broker com protocolo MQTT
+constexpr const char* servidorMQTT = "broker.emqx.io"; // Endereço do servidor MQTT
+constexpr const int portaMQTT = 1883;                  // Porta do servidor MQTT
+constexpr const char* topico = "senai/dataJson";       // Tópico MQTT para publicação/assinatura
+extern WiFiClient espClient;                           // Cliente Wi-Fi para comunicação
+extern PubSubClient client;                            // Cliente MQTT para comunicação
 
 #endif

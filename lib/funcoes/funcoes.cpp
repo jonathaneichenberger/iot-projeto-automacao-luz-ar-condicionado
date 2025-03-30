@@ -1,26 +1,40 @@
 #include "funcoes.h"
 
-// Variaveis para conexão com a internet
-const char* rede = "Wokwi-GUEST";
-const char* senha = "";
-const int canalWiFi = 6;
+WiFiClient espClient;
+PubSubClient client(espClient);
 
 void inicializarSistema(){
   Serial.begin(115200); // Inicializa a comunicação serial a 115200 bps
-  conectarWiFi(rede, senha, canalWiFi); // Conecta ao Wi-Fi
-  
+  conectarWiFi();       // Conecta ao Wi-Fi
+  conectarMQTT();       // Conecta ao broker MQTT
 }
 
-void conectarWiFi(const char* rede, const char* senha, const int canalWiFi) {
-  Serial.print("Conectando ao WiFi");
+void conectarWiFi() {
+  Serial.print("Conectando ao WiFi...");
 
   WiFi.begin(rede, senha, canalWiFi);  // Inicia a conexão com a rede Wi-Fi usando o canal especificado
-  
+
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     Serial.print(".");
   }
 
-  Serial.println();  // Nova linha após a conexão
   Serial.println("Conectado!");  // Mensagem de sucesso na conexão
+}
+
+void conectarMQTT() {
+  client.setServer(servidorMQTT, portaMQTT);
+
+  while (!client.connected()) {
+    String clientId = "ESP32-Receiver-" + String(random(0xffff), HEX); // Gera um ID único para o cliente MQTT
+    Serial.print("Conectando ao Broker MQTT...");
+    if (client.connect(clientId.c_str())) { // Conecta ao broker MQTT
+      Serial.println("Conectado!");
+      client.subscribe(topico); // Inscreve-se no tópico especificado
+    } else {
+      Serial.print(" Falha ao conectar. Erro: ");
+      Serial.println(client.state()); // Mensagem de erro se a conexão falhar
+      delay(1000);
+    }
+  }
 }
