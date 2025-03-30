@@ -1,6 +1,20 @@
 #include "funcoes.h"
 
+// Inicializando as variáveis globais
+bool movimento = false;
+float temperatura = 0.0;
+float umidade = 0.0;
+float luminosidade = 0.0;
 
+WiFiClient espClient;               // Instância de Cliente Wi-Fi para comunicação
+PubSubClient client(espClient);     // Definindo o cliente MQTT
+
+// Definição do LCD (RS, E, D4, D5, D6 e D7)
+LiquidCrystal lcd(LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7); 
+
+// Configuração dos NeoPixels
+Adafruit_NeoPixel strip(PIXEL_COUNT, LAMP_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel stripAir(PIXEL_COUNT, AIR_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 void inicializarSistema(){
   Serial.begin(115200);            // Inicializa a comunicação serial a 115200 bps
@@ -9,11 +23,24 @@ void inicializarSistema(){
   pinMode(LAMP_PIXEL_PIN, OUTPUT); // Inicializa o pino do NeoPixel das lâmpadas como saída
   pinMode(AIR_PIXEL_PIN, OUTPUT);  // Inicializa o pino do NeoPixel do ar-condicionado como saída              
   
+  // Inicializa o LCD
   lcd.begin(20, 4);                // Inicializa o LCD com 20 colunas e 4 linhas
+
+  // Inicializa NeoPixels
+  strip.begin();                   // Inicializa o NeoPixel das lâmpadas
+  strip.show();                    // Inicializa com os LED off  
+  stripAir.begin();                // Inicializa o NeoPixel do ar-condicionado
+  stripAir.show();                 // Inicializa com os LED off  
 
   conectarWiFi();                  // Conecta ao Wi-Fi
   client.setCallback(callback);    // Define a função de callback para mensagens recebidas
   conectarBrokerMQTT();            // Conecta ao broker MQTT
+
+  // Exibe mensagem inicial no LCD
+  lcd.setCursor(2, 0);
+  lcd.print("  Monitoramento  ");
+  delay(2000);
+  lcd.clear();
 }
 
 void conectarWiFi() {
@@ -52,7 +79,6 @@ void callback(char* topic, byte* payload, unsigned int length) {
   memcpy(mensagem, payload, length);                           // Copia os dados da mensagem para o buffer
   mensagem[length] = '\0';                                     // Adiciona o caractere nulo ao final para formar uma string válida
   JsonDocument doc;                                            // Cria um objeto JSON para armazenar os dados recebidos vazio (tipo dinâmico)                   
-  //doc["answer"] = 80;                                          // Adiciona um par chave-valor ao JSON, onde "answer" tem o valor 80
   DeserializationError error = deserializeJson(doc, mensagem); // Converte a string JSON recebida para um objeto JSON
   if (error) {                                                 // Verifica se houve erro na conversão do JSON
     Serial.print("Erro ao analisar JSON: ");                   // Mensagem de erro se a conversão falhar                
@@ -61,10 +87,10 @@ void callback(char* topic, byte* payload, unsigned int length) {
   }
 
   // Extrai os valores do JSON recebido
-  bool movimento = doc["movimento"];                           // Extrai o valor do movimento (booleano) 
-  float temperatura = doc["temperatura"];                      // Extrai o valor da temperatura (float)                 
-  float umidade = doc["umidade"];                              // Extrai o valor da umidade (float)        
-  float luminosidade = doc["luminosidade"];                    // Extrai o valor da luminosidade (float)             
+  movimento = doc["movimento"];                          // Extrai o valor do movimento (booleano) 
+  temperatura = doc["temperatura"];                      // Extrai o valor da temperatura (float)                 
+  umidade = doc["umidade"];                              // Extrai o valor da umidade (float)        
+  luminosidade = doc["luminosidade"];                    // Extrai o valor da luminosidade (float)             
 
   // Exibe os dados recebidos no monitor serial
   Serial.println("--- Dados Recebidos ---");
