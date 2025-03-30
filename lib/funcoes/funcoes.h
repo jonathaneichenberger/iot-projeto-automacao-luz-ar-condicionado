@@ -23,7 +23,8 @@
 // Protótipos das funções
 void inicializarSistema();
 void conectarWiFi();
-void conectarMQTT();
+void conectarBrokerMQTT();
+void callback(char* topic, byte* payload, unsigned int length);
  
 
 // Constantes para conexão com a internet
