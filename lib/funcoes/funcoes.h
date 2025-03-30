@@ -20,4 +20,8 @@
 #define LCD_D6 2          // Pino D6 do LCD
 #define LCD_D7 15         // Pino D7 do LCD
 
-#endif // FUNCOES_H
+// Protótipos das funções
+void inicializarSistema();
+void conectarWiFi(const char* rede, const char* senha, const int canalWiFi);
+
+#endif

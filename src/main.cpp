@@ -3,7 +3,7 @@
 
 
 void setup() {
-
+  inicializarSistema(); // Inicializa o sistema, incluindo Wi-Fi, MQTT e LCD
 }
 
 void loop() {
