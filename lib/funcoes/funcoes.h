@@ -26,6 +26,8 @@ void conectarWiFi();
 void conectarBrokerMQTT();
 void callback(char* topic, byte* payload, unsigned int length);
 void exibirDadosNoLCD();
+void controleArCondicionado();
+
  
 // Constantes para conexão com a internet
 constexpr const char* rede = "Wokwi-GUEST";            // Nome da rede Wi-Fi

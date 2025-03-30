@@ -119,3 +119,23 @@ void exibirDadosNoLCD() {
   lcd.print("Ar Cond: ");
   lcd.print((temperatura < 20 || temperatura > 25) && movimento ? "LIGADO   " : "DESLIGADO");
 }
+
+void controleArCondicionado(){
+  uint32_t cor;
+  if (temperatura > 25) {            // RGB: Red, Green, Blue valor máximo 255.
+    cor = stripAir.Color(0, 0, 255); // Azul: ar-condicionado ligado no frio
+  } else if (temperatura < 20) {
+    cor = stripAir.Color(255, 0, 0); // Vermelho: ar-condicionado ligado no quente
+  } else {
+    stripAir.clear();
+    stripAir.show();
+    return;
+  }
+
+  // Acende todos os LEDs do NeoPixel do ar-condicionado
+  for (int i = 0; i < PIXEL_COUNT; i++) {
+    stripAir.setPixelColor(i, cor);
+  }
+  stripAir.show();
+}
+
