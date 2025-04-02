@@ -16,6 +16,9 @@ LiquidCrystal lcd(LCD_RS, LCD_E, LCD_D4, LCD_D5, LCD_D6, LCD_D7);
 Adafruit_NeoPixel strip(PIXEL_COUNT, LAMP_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel stripAir(PIXEL_COUNT, AIR_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
+// Definição do número de servos
+Servo servo[NUM_SERVOS]; // Array de servos declared as external
+
 void inicializarSistema(){
   Serial.begin(115200);            // Inicializa a comunicação serial a 115200 bps
 
@@ -41,6 +44,11 @@ void inicializarSistema(){
   lcd.print("  Monitoramento  ");
   delay(2000);
   lcd.clear();
+
+  for( int i = 0; i < NUM_SERVOS; i++) { 
+    servo[i].attach(i + 23 + i); // Define os pinos dos servos (23, 25, 27)
+    servo[i].write( 0 ); // Define a posição inicial do servo
+  }
 }
 
 void conectarWiFi() {
@@ -164,5 +172,17 @@ void controleLampadas() {
   } else {
     strip.clear();
     strip.show();
+  }
+}
+
+void abrirJanelas() {
+  for (int i = 0; i < NUM_SERVOS; i++) {
+    servo[i].write(180); // Abre a janela
+  }
+}
+
+void fecharJanelas() {
+  for (int i = 0; i < NUM_SERVOS; i++) {
+    servo[i].write(0); // Fecha a janela
   }
 }

@@ -8,6 +8,7 @@
 #include <LiquidCrystal.h>    // Controla displays LCD baseados no controlador HD44780
 #include <Adafruit_NeoPixel.h>// Controla LEDs RGB endereçáveis da Adafruit (NeoPixels)
 #include <ThingSpeak.h>       // Facilita a comunicação com a plataforma IoT ThingSpeak
+#include <ESP32Servo.h>       // Permite controle de servos com ESP32
 
 // Definição dos pinos
 #define LAMP_PIXEL_PIN 6  // Pino do NeoPixel das lâmpadas
@@ -19,6 +20,7 @@
 #define LCD_D5 21         // Pino D5 do LCD
 #define LCD_D6 2          // Pino D6 do LCD
 #define LCD_D7 15         // Pino D7 do LCD
+#define NUM_SERVOS 3 // Número de servos
 
 // Protótipos das funções
 void inicializarSistema();
@@ -28,6 +30,8 @@ void callback(char* topic, byte* payload, unsigned int length);
 void exibirDadosNoLCD();
 void controleArCondicionado();
 void controleLampadas();
+void abrirJanelas();
+void fecharJanelas();
  
 // Constantes para conexão com a internet
 constexpr const char* rede = "Wokwi-GUEST";            // Nome da rede Wi-Fi
@@ -50,6 +54,7 @@ extern PubSubClient client;         // Instância de Cliente MQTT para comunica�
 extern LiquidCrystal lcd;           // Instância do LCD
 extern Adafruit_NeoPixel strip;     // Instância do NeoPixel das lâmpadas
 extern Adafruit_NeoPixel stripAir;  // Instância do NeoPixel do ar-condicionado
+extern Servo servo[NUM_SERVOS]; // Array de servos
 
 
 

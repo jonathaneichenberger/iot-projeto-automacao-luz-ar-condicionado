@@ -12,6 +12,7 @@ void setup() {
 }
 
 void loop() {
+
   if (!client.connected()) {
     conectarBrokerMQTT();
   }
@@ -32,6 +33,12 @@ void loop() {
     strip.show();                      // Atualiza o NeoPixel das lâmpadas
     stripAir.clear();                     // Desliga o Ar-condicionado se não houver movimento
     stripAir.show();                      // Atualiza o NeoPixel do Ar-condicionado
+  }
+
+  if (temperatura >= 20 && temperatura <= 25) { // Verifica se a temperatura está dentro do intervalo desejado
+    abrirJanelas(); // Chama a função para abrir as janelas
+  } else {
+    fecharJanelas(); // Chama a função para fechar as janelas
   }
 
   client.loop();

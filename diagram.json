@@ -53,6 +53,30 @@
       "attrs": {
         "text": "Este NeoPixel, representa o conjunto \nde lâmpadas que estão em um \ndeterminado local, seja ele um escritório, \num corredor ou uma sala de reunião."
       }
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo1",
+      "top": 332.2,
+      "left": 385,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo2",
+      "top": 332.2,
+      "left": 135.4,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo3",
+      "top": 332.2,
+      "left": 260.2,
+      "rotate": 90,
+      "attrs": {}
     }
   ],
   "connections": [
@@ -75,7 +99,16 @@
     [ "ring1:GND", "esp:GND.1", "black", [ "h-240", "v-19.05" ] ],
     [ "ring2:GND", "esp:GND.1", "black", [ "h249.6", "v-38.25" ] ],
     [ "ring2:VCC", "esp:5V", "red", [ "h153.6", "v0", "h144" ] ],
-    [ "ring2:DIN", "esp:32", "blue", [ "h105.6", "v0", "h76.8" ] ]
+    [ "ring2:DIN", "esp:32", "blue", [ "h105.6", "v0", "h76.8" ] ],
+    [ "servo1:GND", "servo3:GND", "black", [ "v-19.2", "h-124.8" ] ],
+    [ "servo2:GND", "servo3:GND", "black", [ "v-19.2", "h124.8" ] ],
+    [ "servo3:GND", "esp:GND.1", "black", [ "v-19.2", "h28.8" ] ],
+    [ "servo2:V+", "servo3:V+", "red", [ "v-28.8", "h124.7" ] ],
+    [ "servo1:V+", "servo3:V+", "red", [ "v-28.8", "h-124.9" ] ],
+    [ "servo1:V+", "esp:5V", "red", [ "v-28.8", "h-38.5" ] ],
+    [ "servo1:PWM", "esp:23", "blue", [ "v-38.4", "h-182.6" ] ],
+    [ "servo3:PWM", "esp:25", "blue", [ "v0" ] ],
+    [ "servo2:PWM", "esp:27", "blue", [ "v-38.4", "h143.8" ] ]
   ],
   "dependencies": {}
 }
