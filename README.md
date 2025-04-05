@@ -9,6 +9,7 @@
 - [Comunicação MQTT](#comunicacao-mqtt)
 - [Módulo 1:Sensores](#modulo-1)
 - [Módulo 2:Atuadores](#modulo-2)
+- [Resumo do Fluxo](#resumo-fluxo)
 
 ---
 
@@ -43,52 +44,70 @@ Este módulo é responsável por coletar os dados dos sensores conectados ao ESP
 - Sensor de Presença (PIR)
 
 ### Funcionamento:
-1. O ESP32 lê os dados de todos os sensores.
-2. O algoritmo então, irá mandar os dados iniciais e depois analisa se deve ou não enviar dados para o broker, verificando se houve alguma mudança em algum dado previamente coletado.
-3. Os dados são formatados em JSON, como o exemplo abaixo.
+1. O ESP32 conecta-se a rede WiFi e ao Broker via MQTT. 
+2. O ESP32 lê os dados de todos os sensores.
+* Leituras:
+   * PIR (pino 34): Detecta presença humana. Usa interrupção via attachInterrupt() com IRAM_ATTR para garantir resposta rápida.
+   * DHT22 (pino 12): Mede temperatura e umidade.
+   * LDR (pino 35): Mede luminosidade por leitura analógica e cálculo de resistência/lux.
+* Lógica de funcionamento:
+   * Se detectar movimento:
+      * Envia os dados dos sensores.
+   * Se não detectar:
+      * Espera 10 segundos e ainda assim, envia até 3 mensagens extras com os dados para manter a atualização.
+      * Evita envio repetitivo se os dados não mudarem.
+        
+3. O algoritmo então, irá mandar os dados iniciais e depois analisa se deve ou não enviar dados para o broker, verificando se houve alguma mudança em algum dado previamente coletado.
+ 
+4. Os dados são formatados em JSON, como o exemplo abaixo.
    
-**Exemplo de JSON criado:**
-```json
-{
-  "movimento": true,
-  "temperatura": 14,
-  "umidade": 40,
-  "luminosidade": 499.6338
-}
-```
-4. Depois do JSON criado, ele é Serializado para poder enviar os dados em uma única String, como exemplo abaixo.
+   **Exemplo de JSON criado:**
+   ```json
+   {
+     "movimento": true,
+     "temperatura": 14,
+     "umidade": 40,
+     "luminosidade": 499.6338
+   }
+   ```
+5. Depois do JSON criado, ele é Serializado para poder enviar os dados em uma única String, como exemplo abaixo.
    
-**Exemplo de payload JSON enviado:**
-```json
-{"movimento":true,"temperatura":14,"umidade":40,"luminosidade":499.6338}
-```
-5. O ESP32 publica os dados do JSON serializado no tópico `senai/dataJson` no broker MQTT.
+   **Exemplo de payload JSON enviado:**
+   ```json
+   {"movimento":true,"temperatura":14,"umidade":40,"luminosidade":499.6338}
+   ```
+6. O ESP32 publica os dados do JSON serializado no tópico `senai/dataJson` no broker MQTT.
 
 ---
 
 <a id="modulo-2"></a>
 ## 💡 Módulo 2: Atuadores
 
-Este módulo recebe os dados via MQTT e aciona os NeoPixels com base nas informações dos sensores.
+Este módulo recebe os dados via MQTT desserealizando para o formato JSON, adicionando os dados as varoáveis de controle. Com os dados em mão, a lógica implementada aciona os NeoPixels e os servos, que representam as lâmpadas, ar-condicionado e janelas, com base nas informações dos sensores.
 
 ### Atuadores utilizados:
 - Tiras de LED **NeoPixel** (representando ar-condicionado e lâmpadas)
+- **Servos** (representando os motores para abertura das janelas em temperaturas "agrádaveis")
 
 ### Funcionamento:
-1. O ESP32 se conecta ao mesmo broker MQTT.
+1. O ESP32 conecta-se a rede WiFi e ao Broker via MQTT. 
 2. Ele **assina o tópico** `senai/dataJson`.
 3. Ao receber os dados, o ESP32 analisa as informações para decidir:
-   - Se a **temperatura estiver alta** → ativa o NeoPixel do **ar-condicionado**.
-   - Se a **luminosidade estiver baixa** ou houver **presença detectada** → ativa os NeoPixels das **lâmpadas**.
+   - Se a **temperatura estiver acima de 25ºC** → ativa o NeoPixel do **ar-condicionado** com a cor AZUL representando ar-condicionado ligado para **REFRIGERAR O AMBIEMNTE**.
+   - Se a **temperatura estiver abaixo de 20ºC** → ativa o NeoPixel do **ar-condicionado** com a cor VERMELHO representando ar-condicionado ligado para **AQUECIMENTO DO AMBIENTE**.
+   - Se a **luminosidade estiver baixa**  houver **presença detectada** → ativa os NeoPixels das **lâmpadas**.
+   - A intensidade da iluminação das lâmpadas dependera da quantidade de **LUX** captada no ambiente.
+   - Servos serão ativados quando a temperatura externa estiver entre 20ºC e 25ºC, representando a abertura das janelas para aproveitar a temperatura ambiente para climatizar a sala.
 4. Os **NeoPixels acendem** conforme os estados determinados.
 
 ---
 
+<a id="resumo-fluxo"></a>
 ## ✅ Resumo do Fluxo
 
 ```text
 [Sensores] → coleta dados → publica no MQTT  
-[Atuadores] ← recebe dados ← decide e aciona os NeoPixels
+[Atuadores] ← recebe dados ← decide e aciona os NeoPixels e Servos
 
 
   
