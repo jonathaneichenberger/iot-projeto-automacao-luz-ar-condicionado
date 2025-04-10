@@ -108,6 +108,5 @@ Este módulo recebe os dados via MQTT desserealizando para o formato JSON, adici
 ```text
 [Sensores] → coleta dados → publica no MQTT  
 [Atuadores] ← recebe dados ← decide e aciona os NeoPixels e Servos
-
-
+```
   
