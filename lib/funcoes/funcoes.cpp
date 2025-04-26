@@ -5,6 +5,7 @@ bool movimento = false;
 float temperatura = 0.0;
 float umidade = 0.0;
 float luminosidade = 0.0;
+unsigned int counter = 1;
 
 WiFiClient espClient;               // Instância de Cliente Wi-Fi para comunicação
 PubSubClient client(espClient);     // Definindo o cliente MQTT
@@ -17,7 +18,7 @@ Adafruit_NeoPixel strip(PIXEL_COUNT, LAMP_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 Adafruit_NeoPixel stripAir(PIXEL_COUNT, AIR_PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 // Definição do número de servos
-Servo servo[NUM_SERVOS]; // Array de servos declared as external
+Servo servo[NUM_SERVOS];           // Array de servos declared as external
 
 void inicializarSistema(){
   Serial.begin(115200);            // Inicializa a comunicação serial a 115200 bps
@@ -39,6 +40,7 @@ void inicializarSistema(){
   client.setCallback(callback);    // Define a função de callback para mensagens recebidas
   conectarBrokerMQTT();            // Conecta ao broker MQTT
 
+  conectarThingSpeak();            // Conecta ao ThingSpeak
   // Exibe mensagem inicial no LCD
   lcd.setCursor(2, 0);
   lcd.print("  Monitoramento  ");
@@ -46,28 +48,28 @@ void inicializarSistema(){
   lcd.clear();
 
   for( int i = 0; i < NUM_SERVOS; i++) { 
-    servo[i].attach(i + 23 + i); // Define os pinos dos servos (23, 25, 27)
-    servo[i].write( 0 ); // Define a posição inicial do servo
+    servo[i].attach(i + 23 + i);    // Define os pinos dos servos (23, 25, 27)
+    servo[i].write( 0 );            // Define a posição inicial do servo
   }
 }
 
 void conectarWiFi() {
   Serial.print("Conectando ao WiFi...");
 
-  WiFi.begin(rede, senha, canalWiFi);  // Inicia a conexão com a rede Wi-Fi usando o canal especificado
+  WiFi.begin(rede, senha, canalWiFi); // Inicia a conexão com a rede Wi-Fi usando o canal especificado
 
   while (WiFi.status() != WL_CONNECTED) {
     delay(100);
     Serial.print(".");
   }
 
-  Serial.println("Conectado!");  // Mensagem de sucesso na conexão
+  Serial.println("Conectado!");       // Mensagem de sucesso na conexão
 }
 
 void conectarBrokerMQTT() {
   client.setServer(servidorMQTT, portaMQTT);                           // Define o servidor MQTT e a porta para conexão
   while (!client.connected()) {                                        // Loop até conectar ao broker MQTT
-    String clientId = "ESP32-Receiver-" + String(random(0xffff), HEX); // Gera um ID único para o cliente MQTT
+    String clientId = "ESP32-Receiver-senai" + String(random(0xffff), HEX); // Gera um ID único para o cliente MQTT
     Serial.print("Conectando ao Broker MQTT...");                      // Mensagem de tentativa de conexão              
     if (client.connect(clientId.c_str())) {                            // Tenta conectar ao broker MQTT com o ID gerado
       Serial.println("Conectado!");                                    // Mensagem de sucesso na conexão             
@@ -77,6 +79,26 @@ void conectarBrokerMQTT() {
       Serial.println(client.state());                                  // Exibe o estado do erro se a conexão falhar
       delay(1000);                                                     // Aguarda 1 segundo antes de tentar novamente
     }
+  }
+}
+
+void conectarThingSpeak() {
+  ThingSpeak.begin(espClient);
+}
+
+void enviarDadosThingSpeak(float temperature, float humidity, float luminosity) {
+  ThingSpeak.setField(1, temperature);
+  ThingSpeak.setField(2, humidity);
+  ThingSpeak.setField(3, luminosity);
+
+  // Enviar os dados
+  int httpCode = ThingSpeak.writeFields(channelID, writeAPIKey);
+  if (httpCode == 200) {
+    Serial.println("Dados enviados com sucesso ao ThinkSpeak nº " + String(counter));
+    Serial.println("-------------------------------");
+    counter++;
+  } else {
+    Serial.println("Falha ao enviar dados");
   }
 }
 
@@ -122,7 +144,7 @@ void exibirDadosNoLCD() {
 
   lcd.setCursor(0, 2);
   lcd.print("Lampadas: ");
-  lcd.print(movimento && luminosidade < 3000 ? "LIGADAS   " : "DESLIGADAS");
+  lcd.print(movimento && luminosidade <= 700 ? "LIGADAS   " : "DESLIGADAS");
   
   lcd.setCursor(0, 3);
   lcd.print("Ar Cond: ");
@@ -152,15 +174,15 @@ void controleLampadas() {
   int brilho;
 
   if (movimento) {
-    if (luminosidade <= 400) {  
-      brilho = map(luminosidade, 0, 400, 255, 150);
+    if (luminosidade <= 300) {  
+      brilho = map(luminosidade, 0, 300, 255, 150);
       uint32_t corBranca = strip.ColorHSV(0, 0, brilho);
       for (int i = 0; i < PIXEL_COUNT; i++) {
         strip.setPixelColor(i, corBranca);
       }
-    } else if (luminosidade > 400 && luminosidade <= 3000) {
-      brilho = map(luminosidade, 400, 3000, 150, 0);
-      uint32_t corAmarela = strip.ColorHSV(40 * 65536 / 360, 255, brilho);
+    } else if (luminosidade > 300 && luminosidade <= 700) {
+      brilho = map(luminosidade, 300, 700, 150, 0);
+      uint32_t corAmarela = strip.ColorHSV(40 * 65536 / 360, 100, brilho);
       for (int i = 0; i < PIXEL_COUNT; i++) {
         strip.setPixelColor(i, corAmarela);
       }

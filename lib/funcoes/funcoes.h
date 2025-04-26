@@ -20,18 +20,21 @@
 #define LCD_D5 21         // Pino D5 do LCD
 #define LCD_D6 2          // Pino D6 do LCD
 #define LCD_D7 15         // Pino D7 do LCD
-#define NUM_SERVOS 3 // Número de servos
+#define NUM_SERVOS 3      // Número de servos
 
 // Protótipos das funções
 void inicializarSistema();
 void conectarWiFi();
 void conectarBrokerMQTT();
+void conectarThingSpeak();
+void enviarDadosThingSpeak(float temperatura, float umidade, float luminosidade);
 void callback(char* topic, byte* payload, unsigned int length);
 void exibirDadosNoLCD();
 void controleArCondicionado();
 void controleLampadas();
 void abrirJanelas();
 void fecharJanelas();
+
  
 // Constantes para conexão com a internet
 constexpr const char* rede = "Wokwi-GUEST";            // Nome da rede Wi-Fi
@@ -43,18 +46,25 @@ constexpr const char* servidorMQTT = "broker.emqx.io"; // Endereço do servidor 
 constexpr const int portaMQTT = 1883;                  // Porta do servidor MQTT
 constexpr const char* topico = "senai/dataJson";       // Tópico MQTT para publicação/assinatura
 
+constexpr const unsigned long channelID = 2884497;
+constexpr const char* writeAPIKey = "H39UCHX655KFTXM6";
+
 // Variaveis globais para receber dados do Broker MQTT
-extern bool movimento;        // Variável para armazenar o valor de movimento
-extern float temperatura;     // Variável para armazenar a temperatura
-extern float umidade;         // Variável para armazenar a umidade
-extern float luminosidade;    // Variável para armazenar a luminosidade
+extern bool movimento;                  // Variável para armazenar o valor de movimento
+extern float temperatura;               // Variável para armazenar a temperatura
+extern float umidade;                   // Variável para armazenar a umidade
+extern float luminosidade;              // Variável para armazenar a luminosidade
+extern unsigned long tempo;             // Variável para armazenar o tempo de espera
+extern unsigned long tempoAtual;        // Variável para armazenar o tempo atual
+extern const unsigned long tempoLimite; // Tempo limite para considerar que o movimento foi detectado
+
 
 extern WiFiClient espClient;        // Instância de Cliente Wi-Fi para comunicação
 extern PubSubClient client;         // Instância de Cliente MQTT para comunicação
 extern LiquidCrystal lcd;           // Instância do LCD
 extern Adafruit_NeoPixel strip;     // Instância do NeoPixel das lâmpadas
 extern Adafruit_NeoPixel stripAir;  // Instância do NeoPixel do ar-condicionado
-extern Servo servo[NUM_SERVOS]; // Array de servos
+extern Servo servo[NUM_SERVOS];     // Array de servos
 
 
 
