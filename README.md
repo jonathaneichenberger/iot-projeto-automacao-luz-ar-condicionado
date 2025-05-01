@@ -10,6 +10,9 @@
 - [Módulo 1:Sensores](#modulo-1)
 - [Módulo 2:Atuadores](#modulo-2)
 - [Resumo do Fluxo](#resumo-fluxo)
+- [Configuração do Ambiente](#configuração-do-ambiente)
+- [Rodando o Projeto](#rodando-o-projeto)
+- [Tecnologias Utilizadas](#tecnologias-utilizadas)
 
 ---
 
@@ -109,4 +112,82 @@ Este módulo recebe os dados via MQTT desserealizando para o formato JSON, adici
 [Sensores] → coleta dados → publica no MQTT  
 [Atuadores] ← recebe dados ← decide e aciona os NeoPixels e Servos
 ```
-  
+
+---
+
+<a id="configuração-do-ambiente"></a>
+## 🛠 Configuração do Ambiente
+
+1. Instale o [VS Code](https://code.visualstudio.com/)
+2. Instale as extensões **Wokwi Simulator** e **PlatformIO**.  
+
+    ![Extensão Wokwi](https://github.com/user-attachments/assets/3666f874-bbf5-4638-826c-ded0b49a78c4)  
+    ![Extensão PlatformIO](https://github.com/user-attachments/assets/0f6cd5ce-d0f4-431e-87ce-f0d144ada96f)  
+
+3. Para criar ou abrir um projeto no PlatformIO, siga os passos abaixo:  
+   - **Abra a extensão do PlatformIO**:  
+      ![PlatformIO](https://github.com/user-attachments/assets/895a8be8-e98c-47f8-bf7d-7f4b928bb168)  
+
+   - **Aperte F1 e abra o PlatformIO Home**:  
+      ![PlatformIO Home](https://github.com/user-attachments/assets/2ba931d2-86f7-4714-8836-f9c6c42ea66a)  
+
+   - **Escolha "New Project" para criar um novo ou "Open Project" para abrir um existente**:  
+      ![Novo Projeto](https://github.com/user-attachments/assets/0be7694b-f0b4-4688-90d8-714e2637f94a)  
+
+   - **Configure o novo projeto** escolhendo a placa *Espressif ESP32 Dev Module*:  
+      ![Configuração ESP32](https://github.com/user-attachments/assets/7599e8ca-0919-473d-b9ca-4e0af926e86c)  
+
+4. **Montando o Circuito na Plataforma Wokwi**  
+   - Acesse [Wokwi](https://wokwi.com/arduino), faça login e crie um novo projeto.  
+   - Monte seu circuito eletrônico de acordo com o projeto.  
+   - No Wokwi, copie o conteúdo do arquivo `diagram.json`:  
+      ![Diagrama Wokwi](https://github.com/user-attachments/assets/00c177b2-f32d-4aa4-bcb8-3d6658b285c0)  
+   - No VS Code, **crie um arquivo `diagram.json`** dentro da pasta do seu projeto e cole os dados copiados.  
+
+5. **Criando o arquivo de configuração Wokwi**  
+   - No VS Code, crie o arquivo `wokwi.toml` e adicione:  
+     ```toml
+     [wokwi]
+     version = 1
+     elf = ".pio/build/esp32dev/firmware.elf"
+     firmware = ".pio/build/esp32dev/firmware.bin"
+     ```
+
+Agora é só programar no arquivo **src/main.cpp** e rodar a simulação! 🚀  
+
+---
+
+<a id="rodando-o-projeto"></a>
+## ▶️ Rodando o Projeto
+
+1. **Clone este repositório pelo Git Bash**:
+   ```
+   git clone https://github.com/jonathaneichenberger/iot-esp32-lighting-and-temperature-control-commercial-building-project.git
+   ```
+2. Acesse a Pasta do Projeto pelo Git Bash:
+   ```
+   cd iot-esp32-lighting-and-temperature-control-commercial-building-project
+   ```
+3. Abra o VS Code pelo Git Bash:
+   ```
+   code .
+   ```
+4. Use o comando ```CTRL + '``` para abrir o terminal do VS Code e para compilar use o comando:
+   ```
+   pio run
+   ```
+---
+
+<a id="tecnologias-utilizadas"></a>
+## 🔧 Tecnologias Utilizadas
+
+Wokwi - Simulador de circuitos IoT
+
+VS Code - Editor de código
+
+PlatformIO - Ambiente de desenvolvimento para microcontroladores
+
+ESP32 - Microcontrolador utilizado no projeto
+
+ThingSpeak - Plataforma de análise e visualização de dados IoT
+
