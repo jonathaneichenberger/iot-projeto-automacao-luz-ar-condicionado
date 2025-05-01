@@ -1,0 +1,114 @@
+{
+  "version": 1,
+  "author": "Jonathan Reinaldo Eichenberger",
+  "editor": "wokwi",
+  "parts": [
+    {
+      "type": "board-esp32-devkit-c-v4",
+      "id": "esp",
+      "top": 56.46,
+      "left": 284.9,
+      "rotate": 270,
+      "attrs": {}
+    },
+    { "type": "wokwi-lcd2004", "id": "lcd1", "top": -126.44, "left": 256, "attrs": {} },
+    {
+      "type": "wokwi-resistor",
+      "id": "r3",
+      "top": 137.8,
+      "left": 431.15,
+      "rotate": 270,
+      "attrs": { "value": "220" }
+    },
+    {
+      "type": "wokwi-led-ring",
+      "id": "ring1",
+      "top": 168.49,
+      "left": 629.46,
+      "rotate": 90,
+      "attrs": { "pixels": "16" }
+    },
+    {
+      "type": "wokwi-led-ring",
+      "id": "ring2",
+      "top": 158.51,
+      "left": -13.06,
+      "rotate": 270,
+      "attrs": { "pixels": "16" }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text1",
+      "top": 0,
+      "left": -67.2,
+      "attrs": {
+        "text": "Este NeoPixel, representa o \nacionamento do ar condicionado, \nligando ele em AZUL(FRIO) \nquando temperatura for maior \nque 25ºC e em VERMELHO(QUENTE) \nabaixo de 20ºC."
+      }
+    },
+    {
+      "type": "wokwi-text",
+      "id": "text2",
+      "top": 67.2,
+      "left": 576,
+      "attrs": {
+        "text": "Este NeoPixel, representa o conjunto \nde lâmpadas que estão em um \ndeterminado local, seja ele um escritório, \num corredor ou uma sala de reunião."
+      }
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo1",
+      "top": 332.2,
+      "left": 385,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo2",
+      "top": 332.2,
+      "left": 135.4,
+      "rotate": 90,
+      "attrs": {}
+    },
+    {
+      "type": "wokwi-servo",
+      "id": "servo3",
+      "top": 332.2,
+      "left": 260.2,
+      "rotate": 90,
+      "attrs": {}
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "lcd1:A", "r3:2", "red", [ "v28.8", "h28.7" ] ],
+    [ "lcd1:D7", "esp:15", "green", [ "v9.6", "h-28.5" ] ],
+    [ "lcd1:D6", "esp:2", "magenta", [ "v9.6", "h-86.2" ] ],
+    [ "lcd1:D5", "esp:21", "purple", [ "v9.6", "h-163.1" ] ],
+    [ "lcd1:D4", "esp:5", "gold", [ "v9.6", "h-115.2" ] ],
+    [ "lcd1:E", "esp:18", "cyan", [ "v9.6", "h-76.8" ] ],
+    [ "lcd1:RS", "esp:19", "orange", [ "v9.6", "h-66.9" ] ],
+    [ "r3:1", "esp:5V", "red", [ "h0", "v201.6" ] ],
+    [ "lcd1:K", "esp:GND.3", "black", [ "v19.2", "h-115.2" ] ],
+    [ "lcd1:RW", "esp:GND.3", "black", [ "h-0.1", "v19.2", "h-9.6" ] ],
+    [ "lcd1:VSS", "esp:GND.3", "black", [ "v19.2", "h28.8" ] ],
+    [ "lcd1:VDD", "esp:5V", "red", [ "v38.4", "h153.7", "v124.95" ] ],
+    [ "ring1:VCC", "esp:5V", "red", [ "h-115.2", "v0", "h-76.8" ] ],
+    [ "ring1:DIN", "esp:CLK", "blue", [ "h-153.6", "v-134.4" ] ],
+    [ "ring1:GND", "esp:GND.1", "black", [ "h-240", "v-19.05" ] ],
+    [ "ring2:GND", "esp:GND.1", "black", [ "h249.6", "v-38.25" ] ],
+    [ "ring2:VCC", "esp:5V", "red", [ "h153.6", "v0", "h144" ] ],
+    [ "ring2:DIN", "esp:32", "blue", [ "h105.6", "v0", "h76.8" ] ],
+    [ "servo1:GND", "servo3:GND", "black", [ "v-19.2", "h-124.8" ] ],
+    [ "servo2:GND", "servo3:GND", "black", [ "v-19.2", "h124.8" ] ],
+    [ "servo3:GND", "esp:GND.1", "black", [ "v-19.2", "h28.8" ] ],
+    [ "servo2:V+", "servo3:V+", "red", [ "v-28.8", "h124.7" ] ],
+    [ "servo1:V+", "servo3:V+", "red", [ "v-28.8", "h-124.9" ] ],
+    [ "servo1:V+", "esp:5V", "red", [ "v-28.8", "h-38.5" ] ],
+    [ "servo1:PWM", "esp:23", "blue", [ "v-38.4", "h-182.6" ] ],
+    [ "servo3:PWM", "esp:25", "blue", [ "v0" ] ],
+    [ "servo2:PWM", "esp:27", "blue", [ "v-38.4", "h143.8" ] ]
+  ],
+  "dependencies": {}
+}
