@@ -1,0 +1,38 @@
+{
+    "version": 1,
+    "author": "Felipe Fernandes Ribeiro e Jonathan Reinaldo Eichenberger",
+    "editor": "wokwi",
+    "parts": [
+      {
+        "type": "board-esp32-devkit-c-v4",
+        "id": "esp",
+        "top": 55.94,
+        "left": 282.1,
+        "rotate": 90,
+        "attrs": {}
+      },
+      { "type": "wokwi-pir-motion-sensor", "id": "pir1", "top": -34.4, "left": 357.42, "attrs": {} },
+      {
+        "type": "wokwi-dht22",
+        "id": "dht1",
+        "top": -57.3,
+        "left": 273,
+        "attrs": { "temperature": "14" }
+      },
+      { "type": "wokwi-photoresistor-sensor", "id": "ldr1", "top": 51.2, "left": 48.8, "attrs": {} }
+    ],
+    "connections": [
+      [ "esp:TX", "$serialMonitor:RX", "", [] ],
+      [ "esp:RX", "$serialMonitor:TX", "", [] ],
+      [ "dht1:GND", "esp:GND.1", "black", [ "v48", "h-28.8" ] ],
+      [ "ldr1:GND", "esp:GND.1", "black", [ "h9.6", "v28.4", "h57.6" ] ],
+      [ "ldr1:VCC", "esp:5V", "red", [ "h0" ] ],
+      [ "dht1:VCC", "esp:5V", "red", [ "v28.8", "h-48" ] ],
+      [ "dht1:SDA", "esp:12", "yellow", [ "v0" ] ],
+      [ "pir1:VCC", "esp:5V", "red", [ "v28.8", "h-153.6" ] ],
+      [ "pir1:OUT", "esp:34", "cyan", [ "v38.4", "h-28.94" ] ],
+      [ "pir1:GND", "esp:GND.1", "black", [ "v48", "h-125.06" ] ],
+      [ "ldr1:AO", "esp:35", "orange", [ "h0" ] ]
+    ],
+    "dependencies": {}
+  }
