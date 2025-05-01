@@ -162,20 +162,30 @@ Agora é só programar no arquivo **src/main.cpp** e rodar a simulação! 🚀
 
 1. **Clone este repositório pelo Git Bash**:
    ```
-   git clone https://github.com/jonathaneichenberger/iot-esp32-lighting-and-temperature-control-commercial-building-project.git
+   git clone https://github.com/jonathaneichenberger/iot-projeto-automacao-luz-ar-condicionado
    ```
-2. Acesse a Pasta do Projeto pelo Git Bash:
+2. Acesse a Pasta do Projeto com os sensores pelo Git Bash:
    ```
-   cd iot-esp32-lighting-and-temperature-control-commercial-building-project
+   cd iot-projeto-automacao-luz-ar-condicionado/modulo-01-controle-inteligente-sensores
    ```
 3. Abra o VS Code pelo Git Bash:
    ```
    code .
    ```
-4. Use o comando ```CTRL + '``` para abrir o terminal do VS Code e para compilar use o comando:
+4. Acesse a Pasta do Projeto com os atuadores pelo Git Bash:
+   ```
+   cd iot-projeto-automacao-luz-ar-condicionado/modulo-02-controle-inteligente-atuadores
+   ```
+5. Abra o VS Code pelo Git Bash:
+   ```
+   code .
+   ```
+6. Use o comando ```CTRL + '``` para abrir o terminal do VS Code e para compilar use o comando:
    ```
    pio run
    ```
+7. Faça isso com as duas pastas, **módulo01 e módulo 02**. Depois de compilar é só pressionar **F1** e escolher a opção **Wokwi:Start Simulator**.
+   
 ---
 
 <a id="tecnologias-utilizadas"></a>
